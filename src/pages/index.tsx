@@ -1,9 +1,37 @@
+import firebase from 'firebase/app';
+import { useRouter } from 'next/router';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import React from 'react';
-import styles from '../../styles/Home.module.scss';
+import React, { useContext } from 'react';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import { FirebaseContext, UserContext } from '../contexts';
+import styles from './index.module.scss';
 
-const Home: NextPage = () => {
+const IndexPage: NextPage = () => {
+  const { user } = useContext(UserContext);
+  const { auth } = useContext(FirebaseContext);
+  const { setCredential } = useContext(UserContext);
+  const router = useRouter();
+
+  const uiConfig: firebaseui.auth.Config = {
+    signInFlow: 'redirect',
+    signInOptions: [
+      {
+        provider: firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+        customParameters: { lang: 'ja' },
+      },
+    ],
+    callbacks: {
+      signInSuccessWithAuthResult: (authResult, redirectUrl) => {
+        setCredential(authResult as firebase.auth.UserCredential);
+        const dest = redirectUrl || '/';
+        void router.push(dest);
+
+        return false;
+      },
+    },
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -21,34 +49,12 @@ const Home: NextPage = () => {
           <code className={styles.code}>pages/index.js</code>
         </p>
 
+        <p>{user?.screenName || '未ログイン'}</p>
+
         <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+          {!user && (
+            <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
+          )}
         </div>
       </main>
 
@@ -66,4 +72,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default IndexPage;

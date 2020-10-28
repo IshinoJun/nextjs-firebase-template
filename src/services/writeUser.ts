@@ -25,7 +25,7 @@ const writeUser = async (
       /* eslint-disable @typescript-eslint/no-explicit-any */
       providerUid = (credential.additionalUserInfo.profile as any).id_str;
       description =
-        (credential.additionalUserInfo.profile as any).description || '';
+        (credential.additionalUserInfo.profile as any).description ?? '';
       /* eslint-enable */
     }
   }

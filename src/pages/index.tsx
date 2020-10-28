@@ -24,7 +24,7 @@ const IndexPage: NextPage = () => {
     callbacks: {
       signInSuccessWithAuthResult: (authResult, redirectUrl) => {
         setCredential(authResult as firebase.auth.UserCredential);
-        const dest = redirectUrl || '/';
+        const dest = redirectUrl ?? '/';
         void router.push(dest);
 
         return false;

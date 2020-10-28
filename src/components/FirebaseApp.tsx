@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import firebase from 'firebase/app';
 import { User } from '../models';
-import { findUser, writeUser } from '../services';
+import { findUser, writeUser } from '../services/firebase';
 import { UserContext, FirebaseContext } from '../contexts';
 
 const FirebaseApp: FC = ({ children }) => {

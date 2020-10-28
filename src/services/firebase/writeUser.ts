@@ -2,7 +2,7 @@ import firebase from 'firebase/app';
 import { isEmpty } from 'lodash';
 import { sprintf } from 'sprintf-js';
 
-import { User, blankUser } from '../models/User';
+import { User, blankUser } from '../../models/User';
 import { collectionName } from './constants';
 
 const writeUser = async (

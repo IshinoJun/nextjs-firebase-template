@@ -1,5 +1,5 @@
 import firebase from 'firebase/app';
-import { User } from '../models';
+import { User } from '../../models';
 
 import { collectionName } from './constants';
 
